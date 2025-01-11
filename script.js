@@ -52,6 +52,15 @@ document.addEventListener('keydown', (e) => {
     if (e.key === ' ') shootBullet();
 });
 
+// Mobile Controls
+document.getElementById('left-btn').addEventListener('touchstart', () => {
+    if (player.x > 0) player.x -= player.speed;
+});
+document.getElementById('right-btn').addEventListener('touchstart', () => {
+    if (player.x < canvas.width - player.width) player.x += player.speed;
+});
+document.getElementById('shoot-btn').addEventListener('touchstart', shootBullet);
+
 document.getElementById('restart-btn').addEventListener('click', init);
 
 // Shoot Bullets
@@ -175,7 +184,7 @@ function render() {
     healthItems.forEach(item => ctx.drawImage(healthImg, item.x, item.y, item.width, item.height));
     enemyBullets.forEach(bullet => ctx.drawImage(bulletImg, bullet.x, bullet.y, bullet.width, bullet.height));
 
-    renderHealthBar(); // Render health bar in upper right corner
+    renderHealthBar(); // Render health bar
 }
 
 // Game Over
@@ -186,15 +195,15 @@ function gameOver() {
 
 // Game Loop
 function gameLoop() {
-    if (!isGameOver) {
-        spawnEnemies();
-        spawnHealth();
-        enemyShoot();
-        update();
-        render();
-        requestAnimationFrame(gameLoop);
-    }
+    if (isGameOver) return;
+    update();
+    render();
+    spawnEnemies();
+    spawnHealth();
+    enemyShoot();
+    requestAnimationFrame(gameLoop);
 }
 
+// Start Game
 window.addEventListener('resize', resizeCanvas);
 init();
